@@ -1,0 +1,30 @@
+Aufteilen auf mehrere Dateien (Module)
+- data.py
+  - load_scores()
+  - add_score()
+- main.py
+  - Spielauswahl
+  - Spiel starten
+  - Ergebnis an Server schicken
+  - Highscores abfragen und anzeigen
+- game_color.py
+  - def run(state):
+       ...
+       return frame;
+    if __name__ == "__main__":
+        root = tk.Tk()
+        ...
+        root.mainloop()
+- game_target.py
+- game_...
+- server.py (HttpServer)
+  - POST /scores (game, name, points)
+  - GET /scores
+- client.py
+- test_server_client.py
+- test_data.py
+  - def test_data():
+       add_score(...)
+       scores=get_scores()
+       if (scores...)
+          print ("es hat funktioniert, hurra!")
