@@ -1,6 +1,6 @@
 import importlib
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import colorchooser, messagebox
 
 from data import add_score, load_scores
 
@@ -224,6 +224,11 @@ class MainApp:
             ("target_result_subtext", "Zielspiel Ergebnis-Untertext"),
             ("target_restart_text", "Zielspiel Neustarttext"),
         ]
+        color_fields = {
+            key
+            for key, _label in fields
+            if key.endswith("_color")
+        }
 
         for row, (key, label) in enumerate(fields):
             tk.Label(form, text=label, anchor="w").grid(
@@ -233,6 +238,17 @@ class MainApp:
             entry.insert(0, self.settings[key])
             entry.grid(row=row, column=1, padx=14, pady=8)
             entries[key] = entry
+
+            if key in color_fields:
+                tk.Button(
+                    form,
+                    text="...",
+                    width=3,
+                    command=lambda selected_key=key: self.pick_color(
+                        settings_window,
+                        entries[selected_key],
+                    ),
+                ).grid(row=row, column=2, padx=(0, 14), pady=8)
 
         def save_settings():
             new_settings = {
@@ -263,6 +279,19 @@ class MainApp:
             width=18,
             command=save_settings,
         ).grid(row=len(fields), column=0, columnspan=2, pady=18)
+
+    def pick_color(self, parent, entry):
+        current_color = entry.get().strip() or "#ffffff"
+        _rgb, hex_color = colorchooser.askcolor(
+            color=current_color,
+            title="Farbe auswaehlen",
+            parent=parent,
+        )
+        if not hex_color:
+            return
+
+        entry.delete(0, tk.END)
+        entry.insert(0, hex_color)
 
     def start_game(self, game):
         try:
